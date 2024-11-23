@@ -1,12 +1,12 @@
 export default (sequelize, Sequelize) => {
-    const Todo = sequelize.define('todo', {
-        title: {
+    const AquaGSM = sequelize.define('aquagsm', {
+        TC: {
             type: Sequelize.STRING
         },
-        description: {
+        GSM: {
             type: Sequelize.STRING
         },
     });
 
-    return Todo;
+    return AquaGSM;
 };
