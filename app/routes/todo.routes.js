@@ -9,7 +9,7 @@ const router = express.Router();
 // create a todo item
 router.post('/', async(req, res) => {
     try {
-        const todo = await TodoService.create(req.user, req.body);
+        const todo = await TodoService.create(req.body);
         res.send(todo);
     }
     catch (error) {
@@ -20,7 +20,7 @@ router.post('/', async(req, res) => {
 // get todo items with filtering and sorting
 router.get('/', async(req, res) => {
     try {
-        const todos = await TodoService.find(req.user, req.query.sort, req.query.filter);
+        const todos = await TodoService.find(req.query.sort, req.query.filter);
         res.send(todos);
     }
     catch (error) {
@@ -32,7 +32,6 @@ router.get('/', async(req, res) => {
 router.post('/:todoId', async(req, res) => {
     try {
         const todo = await TodoService.update(
-            req.user,
             req.params.todoId,
             req.body
         );
@@ -46,7 +45,7 @@ router.post('/:todoId', async(req, res) => {
 // delete a todo item
 router.delete('/:todoId', async(req, res) => {
     try {
-        const response = await TodoService.delete(req.user, req.params.todoId);
+        const response = await TodoService.delete(req.params.todoId);
         res.send(response);
     }
     catch (error) {
