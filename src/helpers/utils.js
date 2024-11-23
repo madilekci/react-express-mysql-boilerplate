@@ -3,7 +3,7 @@ const removeEmptyStrings = obj => {
     const newObj = {};
     Object.keys(obj).forEach(prop => {
         if (obj[prop] !== '') {
-            newObj[prop] = obj[prop]
+            newObj[prop] = obj[prop];
         }
     });
     return newObj;
@@ -11,4 +11,4 @@ const removeEmptyStrings = obj => {
 
 export default {
     removeEmptyStrings,
-}
+};
