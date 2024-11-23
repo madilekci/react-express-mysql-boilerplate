@@ -7,14 +7,17 @@ function Home() {
     const backend = useBackend();
     const [todos, setTodos] = useState([]);
 
-    useEffect(async() => {
+    useEffect(() => {
         // Send a GET request to backend endpoint and get the list of todos
-        const response = await backend.get('todos', {}, false);
-        if (response) {
-            // Add new todo to the list
-            setTodos(response.data);
+        async function fetchData() {
+            const response = await backend.get('todos', {}, false);
+            if (response) {
+                // Add new todo to the list
+                setTodos(response.data);
+            }
         }
-    }, []);
+        fetchData();
+    }, [backend]);
 
     return (
         <div style={{ minHeight: '700px' }}>
