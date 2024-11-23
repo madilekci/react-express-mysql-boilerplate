@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useBackend } from '../../context/backend-context.jsx';
+import { useBackend } from '../context/backend-context.js';
 import List from '../components/list.js';
 
 function Home() {
@@ -10,6 +10,8 @@ function Home() {
     useEffect(() => {
         // Send a GET request to backend endpoint and get the list of todos
         async function fetchData() {
+            console.log('Fetching data...');
+
             const response = await backend.get('todos', {}, false);
             if (response) {
                 // Add new todo to the list

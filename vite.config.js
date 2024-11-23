@@ -16,7 +16,9 @@ export default defineConfig({
         })
       },
     },
-    react(),
+    react({
+      jsxRuntime: 'classic',
+    }),
   ],
 
   optimizeDeps: {

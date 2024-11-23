@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef } from 'react';
+import { createContext, useContext, useRef } from 'react';
 
 // helpers
 import Backend from '../helpers/backend.js';
