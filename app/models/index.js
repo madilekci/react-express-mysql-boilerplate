@@ -3,6 +3,7 @@ import Sequelize from 'sequelize';
 
 // import models
 import AquaGSM from './aquaGSM.model.js';
+import TcPro from './tcPro.model.js';
 
 const { DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME, DB_DIALECT } = process.env;
 const POOL = {
@@ -25,5 +26,6 @@ db.sequelize = sequelize;
 
 // import models and add to db object
 db.AquaGSM = AquaGSM(sequelize, Sequelize);
+db.TcPro = TcPro(sequelize, Sequelize);
 
 export default db;
