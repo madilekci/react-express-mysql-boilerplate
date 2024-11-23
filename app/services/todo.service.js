@@ -1,7 +1,7 @@
 import db from '../models/index.js';
 import { BadRequestError, NotFoundError } from '../common/errors.js';
 
-const Todo = db.tutorials;
+const Todo = db.todo;
 
 export default class TodoService {
     static async create({ title, description }) {
