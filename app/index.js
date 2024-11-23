@@ -8,8 +8,9 @@ import routes from './routes/index.js';
 
 const app = express();
 
-const PORT = process.env.PORT || 8080;
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:8081';
+const PORT = process.env.PORT || 8081;
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+console.log('client url', CLIENT_URL);
 
 const corsOptions = { origin: CLIENT_URL };
 
