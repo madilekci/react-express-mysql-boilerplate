@@ -20,7 +20,6 @@ function Home() {
     useEffect(() => {
         fetchData();
     }, [backend, fetchData]);
-    
 
     return (
         <div style={{ minHeight: '700px' }}>

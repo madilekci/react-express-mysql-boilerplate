@@ -1,4 +1,4 @@
-import { Table, Typography } from 'antd';
+import { Table } from 'antd';
 
 const TodoTable = ({ dataSource }) => {
     const columns = [
@@ -16,7 +16,6 @@ const TodoTable = ({ dataSource }) => {
 
     console.log('dataSource', dataSource);
     return <Table dataSource={dataSource} columns={columns} />;
-
 };
 
 export default TodoTable;
