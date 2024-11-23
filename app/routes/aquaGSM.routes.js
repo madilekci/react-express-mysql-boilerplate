@@ -7,9 +7,9 @@ import handleError from '../middleware/handle-error.js';
 const router = express.Router();
 
 // get aquaGSM items with filtering and sorting
-router.get('/', async(req, res) => {
+router.post('/', async(req, res) => {
     try {
-        const aquaGSMs = await AquaGSMService.find(req.query.sort, req.query.filter);
+        const aquaGSMs = await AquaGSMService.find(req.body.filter);
         res.send(aquaGSMs);
     }
     catch (error) {
