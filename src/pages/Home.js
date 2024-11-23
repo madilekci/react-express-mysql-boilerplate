@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useBackend } from '../context/backend-context.js';
-import List from '../components/list.js';
+import TodoTable from '../components/TodoTable.js';
 import CreateTodoForm from '../components/CreateTodoForm.js';
 
 function Home() {
@@ -25,7 +25,7 @@ function Home() {
         <div style={{ minHeight: '700px' }}>
             <h1>Home</h1>
             <CreateTodoForm onSubmit={fetchData}/>
-            <List dataSource={todos} />
+            <TodoTable dataSource={todos} />
         </div>
     );
 }
