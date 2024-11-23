@@ -7,7 +7,7 @@ import handleError from '../middleware/handle-error.js';
 const router = express.Router();
 
 // get tcpro items with filtering and sorting
-router.post('/', async(req, res) => {
+router.post('/personal', async(req, res) => {
     try {
         const tcProData = await TcProService.find(req.body.filter);
         res.send(tcProData);
