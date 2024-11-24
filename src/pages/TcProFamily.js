@@ -21,9 +21,7 @@ function AquaGSM() {
         }
         const response = await backend.post(
             'tcPro/family',
-            {
-                filter: { TC: tc },
-            },
+            { tc },
             false
         );
         if (response) {

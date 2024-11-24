@@ -21,7 +21,7 @@ router.post('/personal', async(req, res) => {
 // Add phone numbers and relations to the response
 router.post('/family', async(req, res) => {
     try {
-        const tcProData = await TcProService.findFamily(convertTurkishUppercase(req.body.filter));
+        const tcProData = await TcProService.findFamily(req.body.tc);
         res.send(tcProData);
     }
     catch (error) {
