@@ -166,6 +166,8 @@ export default class TcProService {
                     }
                 }
             }
+
+            return relationships;
         };
 
         // Find the person with the initialTC
@@ -176,8 +178,14 @@ export default class TcProService {
 
         // Find the family members of the person such as father, mother, grandparents etc.
         const familyMembers = await findExtendedFamily(person);
+        const uniqueFamilyMembers = familyMembers.reduce((acc, current) => {
+            if (!acc.some(item => item.TC === current.TC)) {
+                acc.push(current);
+            }
+            return acc;
+        }, []);
 
         console.log(`Total extended family members found: ${familyMembers.length} for TC: ${initialTC}`);
-        return [person, ...familyMembers];
+        return [person, ...uniqueFamilyMembers];
     }
 }
