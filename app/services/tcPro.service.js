@@ -32,7 +32,7 @@ export default class TcProService {
                     return;
                 }
                 people.forEach(person => {
-                    relationships.push({ TC: person.TC, relation });
+                    relationships.push({ ...person, relation });
                 });
             };
             const findChildren = async person => {
