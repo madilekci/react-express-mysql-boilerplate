@@ -1,5 +1,5 @@
 import db from '../models/index.js';
-const { Op } = require('sequelize');
+import { Op } from 'sequelize';
 
 const TcPro = db.TcPro;
 
@@ -14,13 +14,12 @@ export default class TcProService {
         }
 
         // if no filter, default limit to 10
-        if (!options.where) {
-            options.limit = 10;
-        }
-
+        options.limit = options.where ? 100 : 10;
         console.log('options', options);
 
         const tcProData = await TcPro.findAll(options);
+        console.log(`${tcProData.length} records found`);
+
         return tcProData;
     }
 
@@ -40,13 +39,12 @@ export default class TcProService {
         }
 
         // if no filter, default limit to 10
-        if (!options.where) {
-            options.limit = 10;
-        }
+        options.limit = options.where ? 100 : 10;
 
         console.log('options', options);
 
         const tcProData = await TcPro.findAll(options);
+        console.log(`${tcProData.length} records found`);
         return tcProData;
     }
 }
