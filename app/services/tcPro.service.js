@@ -1,6 +1,8 @@
 import db from '../models/index.js';
 import { Op } from 'sequelize';
 
+import AquaGSMService from './aquaGSM.service.js';
+
 const TcPro = db.TcPro;
 
 export default class TcProService {
@@ -185,7 +187,11 @@ export default class TcProService {
             return acc;
         }, []);
 
+        for (const person of uniqueFamilyMembers) {
+            person.otherGSM = await AquaGSMService.find({ TC: person.TC });
+        }
+
         console.log(`Total extended family members found: ${familyMembers.length} for TC: ${initialTC}`);
-        return [person, ...uniqueFamilyMembers];
+        return uniqueFamilyMembers;
     }
 }
