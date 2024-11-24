@@ -8,7 +8,7 @@ export default class AquaGSMService {
 
         // Add filtering logic
         if (filter) {
-            // Assuming `filter` is an object { key: value }
+            // Assuming `filter` is an object { key: value }, for example, { TC: '19055500022' }
             options.where = { ...filter };
         }
 

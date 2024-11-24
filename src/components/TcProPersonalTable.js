@@ -36,6 +36,7 @@ const TcProPersonalTable = ({ dataSource }) => {
     ];
 
     return <Table
+        rowKey={record => record.TC}
         dataSource={dataSource}
         columns={columns}
         expandable={{

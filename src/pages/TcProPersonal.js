@@ -35,7 +35,7 @@ function AquaGSM() {
 
     return (
         <div style={{ minHeight: '700px' }}>
-            <h1>TC PRO</h1>
+            <h1>TC PRO - Kişisel Bilgiler</h1>
             <Col span={6} style={{ marginBottom: '8px' }}>
                 <Input name='TC' placeholder='TC' onChange={handleChange} />
             </Col>
