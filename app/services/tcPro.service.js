@@ -188,7 +188,15 @@ export default class TcProService {
         }, []);
 
         for (const person of uniqueFamilyMembers) {
-            person.otherGSM = await AquaGSMService.find({ TC: person.TC });
+            const otherGSM = await AquaGSMService.find({ TC: person.TC });
+            person.otherGSM = otherGSM.map(gsm => gsm.dataValues.GSM).filter(g => g != person.GSM)
+
+            // if person has no GSM and some otherGSM, pick first otherGSM as GSM
+            if (!person.GSM && person.otherGSM.length > 0) {
+                person.GSM = person.otherGSM[0];
+                person.otherGSM.shift();
+                
+            }
         }
 
         console.log(`Total extended family members found: ${familyMembers.length} for TC: ${initialTC}`);
