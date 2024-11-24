@@ -1,4 +1,7 @@
+import { Op } from 'sequelize';
+
 import db from '../models/index.js';
+import TcProService from './tcPro.service.js';
 
 const AquaGSM = db.AquaGSM;
 
@@ -20,6 +23,24 @@ export default class AquaGSMService {
         console.log('options', options);
 
         const aquaGSMs = await AquaGSM.findAll(options);
-        return aquaGSMs;
+
+        const enrichedResults = await Promise.all(
+            aquaGSMs.map(async record => {
+                const tcPro = await TcProService.find({
+                    [Op.or]: [
+                        { TC: record.TC },
+                        { GSM: record.GSM },
+                    ],
+                });
+
+                return {
+                    ...record.get(),
+                    AD: tcPro?.AD || null,
+                    SOYAD: tcPro?.SOYAD || null,
+                };
+            })
+        );
+
+        return enrichedResults;
     }
 }

@@ -180,22 +180,22 @@ export default class TcProService {
 
         // Find the family members of the person such as father, mother, grandparents etc.
         const familyMembers = await findExtendedFamily(person);
-        const uniqueFamilyMembers = [{ ...person, relation: 'Self' }, ...familyMembers].reduce((acc, current) => {
-            if (!acc.some(item => item.TC === current.dataValues.TC)) {
-                acc.push({...current.dataValues, relation: current.relation});
+        const uniqueFamilyMembers = [{ ...person, relation: 'Self' }, ...familyMembers.get()].reduce((acc, current) => {
+            if (!acc.some(item => item.TC === current.TC)) {
+                acc.push({ ...current, relation: current.relation });
             }
             return acc;
         }, []);
 
         for (const person of uniqueFamilyMembers) {
             const otherGSM = await AquaGSMService.find({ TC: person.TC });
-            person.otherGSM = otherGSM.map(gsm => gsm.dataValues.GSM).filter(g => g != person.GSM)
+            person.otherGSM = otherGSM.map(g => g.GSM)
+                .filter(g => g !== person.GSM);
 
             // if person has no GSM and some otherGSM, pick first otherGSM as GSM
             if (!person.GSM && person.otherGSM.length > 0) {
                 person.GSM = person.otherGSM[0];
                 person.otherGSM.shift();
-                
             }
         }
 
