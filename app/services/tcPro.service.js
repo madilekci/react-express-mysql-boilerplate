@@ -181,8 +181,8 @@ export default class TcProService {
         // Find the family members of the person such as father, mother, grandparents etc.
         const familyMembers = await findExtendedFamily(person);
         const uniqueFamilyMembers = [{ ...person, relation: 'Self' }, ...familyMembers].reduce((acc, current) => {
-            if (!acc.some(item => item.TC === current.TC)) {
-                acc.push(current);
+            if (!acc.some(item => item.TC === current.dataValues.TC)) {
+                acc.push({...current.dataValues, relation: current.relation});
             }
             return acc;
         }, []);

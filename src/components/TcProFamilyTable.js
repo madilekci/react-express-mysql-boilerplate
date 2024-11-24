@@ -11,8 +11,8 @@ const TcProFamilyTable = ({ dataSource }) => {
     //     DOGUMYERI: 'Çelikhan/Adıyaman',
     //     ADRESIL: 'İstanbul',
     //     ADRESILCE: 'Zeytinburnu',
-    //     YAKINLIK: 'Kendisi',
-    //     DIGERGSM: ['5337459710', '5327459710', '5317459710'],
+    //     relation: 'Kendisi',
+    //     otherGSM: ['5337459710', '5327459710', '5317459710'],
     // },
     // {
     //     TC: '19054321099',
@@ -28,7 +28,7 @@ const TcProFamilyTable = ({ dataSource }) => {
     // }
     // ];
 
-    const columnNames = ['YAKINLIK', 'TC', 'AD', 'SOYAD', 'GSM', 'DOGUMTARIHI', 'DOGUMYERI', 'ADRESIL', 'ADRESILCE'];
+    const columnNames = ['relation', 'TC', 'AD', 'SOYAD', 'GSM', 'DOGUMTARIHI', 'DOGUMYERI', 'ADRESIL', 'ADRESILCE'];
     const columns = [
         ...columnNames.map(columnName => ({
             title: columnName,
@@ -42,22 +42,14 @@ const TcProFamilyTable = ({ dataSource }) => {
         dataSource={dataSource}
         columns={columns}
         expandable={{
-            expandedRowRender: data => (
-                <>
-                    {
-                        data.DIGERGSM?.length && (
-                            <>
-                                <h3>Diğer GSM</h3>
-                                <ul>
-                                    {data.DIGERGSM?.map((gsm, index) => (
-                                        <li key={index}>{gsm}</li>
-                                    ))}
-                                </ul>
-                            </>
-                        )
-                    }
-                </>
+            expandedRowRender: row => (
+                    <ul>
+                        {row?.otherGSM?.map((GSM, index) => (
+                            <li key={index}>{GSM}</li>
+                        ))}
+                    </ul>
             ),
+            rowExpandable: row => row.otherGSM?.length > 0
         }}
     />;
 };
