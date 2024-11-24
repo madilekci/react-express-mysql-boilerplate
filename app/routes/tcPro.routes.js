@@ -1,7 +1,7 @@
 import express from 'express';
 
 import TcProService from '../services/tcPro.service.js';
-
+import convertTurkishUppercase from '../common/convert-turkish-uppercase.js';
 import handleError from '../middleware/handle-error.js';
 
 const router = express.Router();
@@ -9,7 +9,7 @@ const router = express.Router();
 // get tcpro items with filtering and sorting
 router.post('/personal', async(req, res) => {
     try {
-        const tcProData = await TcProService.find(req.body.filter);
+        const tcProData = await TcProService.find(convertTurkishUppercase(req.body.filter));
         res.send(tcProData);
     }
     catch (error) {
@@ -21,7 +21,7 @@ router.post('/personal', async(req, res) => {
 // Add phone numbers and relations to the response
 router.post('/family', async(req, res) => {
     try {
-        const tcProData = await TcProService.findFamily(req.body.filter);
+        const tcProData = await TcProService.findFamily(convertTurkishUppercase(req.body.filter));
         res.send(tcProData);
     }
     catch (error) {
