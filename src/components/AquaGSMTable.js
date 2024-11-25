@@ -1,18 +1,12 @@
 import { Table } from 'antd';
 
 const AquaGSMTable = ({ dataSource }) => {
-    const columns = [
-        {
-            title: 'TC',
-            dataIndex: 'TC',
-            key: 'TC'
-        },
-        {
-            title: 'GSM',
-            dataIndex: 'GSM',
-            key: 'GSM'
-        }
-    ];
+    const columnNames = ['TC', 'GSM', 'AD', 'SOYAD'];
+    const columns = columnNames.map(name => ({
+        title: name,
+        dataIndex: name,
+        key: name,
+    }));
 
     return <Table dataSource={dataSource} columns={columns} />;
 };
