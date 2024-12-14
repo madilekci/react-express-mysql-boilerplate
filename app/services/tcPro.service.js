@@ -6,6 +6,19 @@ import AquaGSMService from './aquaGSM.service.js';
 const TcPro = db.TcPro;
 
 export default class TcProService {
+    static relationKeys = {
+        self: 'Kendisi',
+        mother: 'Anne',
+        father: 'Baba',
+        sibling: 'Kardeş',
+        child: 'Çocuk',
+        grandFather: 'Dede',
+        grandMother: 'Nene',
+        uncleAunt: 'Amca/Dayı - Hala/Teyze',
+        cousin: 'Kuzen',
+        grandChild: 'Torun',
+    }
+
     static async find(filter) {
         const options = {};
 
@@ -25,7 +38,7 @@ export default class TcProService {
         return tcProData;
     }
 
-    static async findFamily(initialTC) {
+    static async findFamily(initialTC, advancedSearch = false) {
         const findExtendedFamily = async person => {
             const relationships = [];
 
@@ -41,7 +54,7 @@ export default class TcProService {
                 const children = await TcPro.findAll({
                     where: { [Op.or]: [{ BABATC: person.TC }, { ANNETC: person.TC }] }
                 });
-                addRelationToArray(children, 'Child');
+                addRelationToArray(children, this.relationKeys.child);
                 return children;
             };
             const findGrandChildren = async children => {
@@ -55,7 +68,7 @@ export default class TcProService {
                     }
                 }
 
-                addRelationToArray(grandchildren, 'Grandchild');
+                addRelationToArray(grandchildren, this.relationKeys.grandChild);
 
                 return grandchildren;
             };
@@ -72,7 +85,7 @@ export default class TcProService {
                         TC: { [Op.ne]: TC }
                     }
                 });
-                addRelationToArray(siblings, 'Sibling');
+                addRelationToArray(siblings, this.relationKeys.sibling);
 
                 return siblings;
             };
@@ -83,8 +96,8 @@ export default class TcProService {
                 const mother = await TcPro.findOne({ where: { TC: ANNETC } });
                 const parents = [father, mother].filter(Boolean);
 
-                addRelationToArray([father], 'Father');
-                addRelationToArray([mother], 'Mother');
+                addRelationToArray([father], this.relationKeys.father);
+                addRelationToArray([mother], this.relationKeys.mother);
 
                 return parents;
             };
@@ -93,12 +106,12 @@ export default class TcProService {
                 for await (const parent of parents) {
                     if (parent.BABATC) {
                         const grandFather = await TcPro.findOne({ where: { TC: parent.BABATC } });
-                        addRelationToArray([grandFather], 'Grandfather');
+                        addRelationToArray([grandFather], this.relationKeys.grandFather);
                         grandParents.push(grandFather);
                     }
                     if (parent.ANNETC) {
                         const grandMother = await TcPro.findOne({ where: { TC: parent.ANNETC } });
-                        addRelationToArray([grandMother], 'Grandmother');
+                        addRelationToArray([grandMother], this.relationKeys.grandMother);
                         grandParents.push(grandMother);
                     }
                 }
@@ -123,7 +136,7 @@ export default class TcProService {
                     }
                 }
 
-                addRelationToArray(unclesAunts, 'Uncle/Aunt');
+                addRelationToArray(unclesAunts, this.relationKeys.uncleAunt);
 
                 return unclesAunts;
             };
@@ -143,30 +156,26 @@ export default class TcProService {
                     }
                 }
 
-                addRelationToArray(cousins, 'Cousin');
+                addRelationToArray(cousins, this.relationKeys.cousin);
 
                 return cousins;
             };
 
             console.log(`Starting search for extended family members of TC: ${initialTC}`);
-            // Find children, grandChildren
+
+            // Find parents, children, siblings
+            const parents = await findParents(person);
             const children = await findChildren(person);
-            if (children?.length > 0) {
-                await findGrandChildren(children);
-            }
             await findSiblings(person);
 
-            // Find parents, grandparents, uncles/aunts, and cousins
-            if (person.BABATC || person.ANNETC) {
-                const parents = await findParents(person);
-                if (parents?.length > 0) {
-                    await findGrandParents(parents);
+            if (advancedSearch) {
+                // Find uncles/aunts, cousins
+                const unclesAunts = await findUnclesAunts(parents);
+                await findCousins(unclesAunts);           
 
-                    const unclesAunts = await findUnclesAunts(parents);
-                    if (unclesAunts?.length > 0) {
-                        await findCousins(unclesAunts);
-                    }
-                }
+                // Find grandparents, grandchilds
+                await findGrandParents(parents);
+                await findGrandChildren(children);
             }
 
             return relationships;
@@ -180,18 +189,21 @@ export default class TcProService {
 
         // Find the family members of the person such as father, mother, grandparents etc.
         const familyMembers = await findExtendedFamily(person);
-        const uniqueFamilyMembers = [{ ...person, relation: 'Self' }, ...familyMembers].reduce((acc, current) => {
+        // Make family members array unique by TC
+        const uniqueFamilyMembers = [{ ...person, relation: this.relationKeys.self }, ...familyMembers].reduce((acc, current) => {
             if (!acc.some(item => item.TC === current.dataValues.TC)) {
                 acc.push({...current.dataValues, relation: current.relation});
             }
             return acc;
         }, []);
 
+        // Add gsm
         for (const person of uniqueFamilyMembers) {
+            // Add other GSM numbers for each family member if exists in aquagsm
             const otherGSM = await AquaGSMService.find({ TC: person.TC });
             person.otherGSM = otherGSM.map(gsm => gsm.dataValues.GSM).filter(g => g != person.GSM)
 
-            // if person has no GSM and some otherGSM, pick first otherGSM as GSM
+            // if person has no GSM and some otherGSM, pick first one from otherGSM as GSM
             if (!person.GSM && person.otherGSM.length > 0) {
                 person.GSM = person.otherGSM[0];
                 person.otherGSM.shift();
