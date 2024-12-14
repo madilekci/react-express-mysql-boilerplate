@@ -1,33 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useBackend } from '../context/backend-context.js';
-import TodoTable from '../components/TodoTable.js';
-import CreateTodoForm from '../components/CreateTodoForm.js';
+// src/pages/Home.js
 
-function Home() {
-    const backend = useBackend();
-    const [todos, setTodos] = useState([]);
+import React from 'react'
+import { Layout } from 'antd'
+import Navbar from '../components/Navbar'
+import HomeInfo from '../components/HomeInfo'
 
-    async function fetchData() {
-        console.log('Fetching data...');
+const { Content } = Layout
 
-        const response = await backend.get('todos', {}, false);
-        if (response) {
-            // Add new todo to the list
-            setTodos(response);
-        }
-    }
+const Home = () => (
+	<Layout>
+		<Navbar />
+		<Content style={{ padding: '0 50px', minHeight: '700px' }}>
+			<div className="site-layout-content">
+				<HomeInfo />
+			</div>
+		</Content>
+	</Layout>
+)
 
-    useEffect(() => {
-        fetchData();
-    }, [backend, fetchData]);
-
-    return (
-        <div style={{ minHeight: '700px' }}>
-            <h1>Home</h1>
-            <CreateTodoForm onSubmit={fetchData}/>
-            <TodoTable dataSource={todos} />
-        </div>
-    );
-}
-
-export default Home;
+export default Home

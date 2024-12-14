@@ -1,0 +1,43 @@
+/* src/components/HomeInfo.css */
+.intro-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .info-cards .ant-card {
+    margin-bottom: 16px;
+  }
+  
+  .custom-card {
+    background-color: #e6f7ff;
+    border: 2px solid #1890ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  .custom-card .ant-card-head {
+    background-color: #1890ff;
+    color: white;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .custom-card .ant-card-head-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .custom-card .ant-card-body {
+    font-size: 18px;
+  }
+  
+  .custom-card ul {
+    padding-left: 20px;
+  }
+  
+  .custom-card li {
+    padding: 4px 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
