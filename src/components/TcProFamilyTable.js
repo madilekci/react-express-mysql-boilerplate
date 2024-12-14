@@ -28,7 +28,7 @@ const TcProFamilyTable = ({ dataSource }) => {
     // }
     // ];
 
-    const columnNames = ['relation', 'TC', 'AD', 'SOYAD', 'GSM', 'DOGUMTARIHI', 'DOGUMYERI', 'ADRESIL', 'ADRESILCE'];
+    const columnNames = ['TC', 'AD', 'SOYAD', 'GSM', 'DOGUMTARIHI', 'DOGUMYERI', 'ADRESIL', 'ADRESILCE'];
     const columns = [
         ...columnNames.map(columnName => ({
             title: columnName,
@@ -36,6 +36,13 @@ const TcProFamilyTable = ({ dataSource }) => {
             key: columnName
         }))
     ];
+
+    // add column relation with custom name
+    columns.push({
+        title: 'İlişki',
+        dataIndex: 'relation',
+        key: 'relation'
+    })
 
     return <Table
         rowKey={record => record.TC}
