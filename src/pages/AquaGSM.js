@@ -15,14 +15,14 @@ function AquaGSM() {
         GSM: undefined
     });
 
-    const fetchData = async(filter = {}) => {
+    const fetchData = async() => {
         try {
             setLoading(true);
-            filter = Utils.removeEmptyStrings(filter);
+            const _filter = Utils.removeEmptyStrings(filter);
             const response = await backend.post(
                 'aquaGSM',
                 {
-                    filter: filter ? { ...filter } : undefined,
+                    filter: _filter ? { ..._filter } : undefined,
                 },
                 false
             );
@@ -40,7 +40,7 @@ function AquaGSM() {
 
     const handleKeyDown = event => {
         if (event.key === 'Enter' && !loading) {
-            fetchData(filter);
+            fetchData();
         }
     };
 
@@ -53,7 +53,7 @@ function AquaGSM() {
             <Col span={6} style={{ marginBottom: '8px' }}>
                 <Input placeholder="GSM" onKeyDown={handleKeyDown} onChange={e => setFilter({ ...filter, GSM: e.target.value })} />
             </Col>
-            <Button type="primary" disabled={loading} onClick={() => fetchData(filter)}>
+            <Button type="primary" disabled={loading} onClick={() => fetchData()}>
 				Search
             </Button>
             <Divider />

@@ -17,14 +17,14 @@ function AquaGSM() {
         SOYAD: undefined
     });
 
-    async function fetchData(filter = {}) {
+    async function fetchData() {
         try {
             setLoading(true);
-            filter = Utils.removeEmptyStrings(filter);
+            const _filter = Utils.removeEmptyStrings(filter);
             const response = await backend.post(
                 'tcPro/personal',
                 {
-                    filter: filter ? { ...filter } : undefined,
+                    filter: _filter ? { ..._filter } : undefined,
                 },
                 false
             );
@@ -36,14 +36,13 @@ function AquaGSM() {
             console.error(error);
         }
         finally {
-            await new Promise(resolve => setTimeout(resolve, 2000));
             setLoading(false);
         }
     }
 
     const handleKeyDown = event => {
         if (event.key === 'Enter' && !loading) {
-            fetchData(filter);
+            fetchData();
         }
     };
 
@@ -66,7 +65,7 @@ function AquaGSM() {
             <Col span={6} style={{ marginBottom: '8px' }}>
                 <Input name='SOYAD' placeholder='SOYAD' onChange={handleChange} onKeyDown={handleKeyDown} />
             </Col>
-            <Button type='primary' disabled={loading} onClick={() => fetchData(filter)} > Search </Button>
+            <Button type='primary' disabled={loading} onClick={() => fetchData()} > Search </Button>
             <Divider/>
             {
                 loading ?
