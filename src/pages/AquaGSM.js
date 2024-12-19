@@ -37,14 +37,20 @@ function AquaGSM() {
         }
     };
 
+    const handleKeyDown = event => {
+        if (event.key === 'Enter' && !loading) {
+            fetchData(filter);
+        }
+    };
+
     return (
         <div style={{ minHeight: '700px' }}>
             <h1>TC - GSM</h1>
             <Col span={6} style={{ marginBottom: '8px' }}>
-                <Input placeholder='TC' onChange={e => setFilter({ ...filter, TC: e.target.value })} />
+                <Input placeholder="TC" onKeyDown={handleKeyDown} onChange={e => setFilter({ ...filter, TC: e.target.value })} />
             </Col>
             <Col span={6} style={{ marginBottom: '8px' }}>
-                <Input placeholder='GSM' onChange={e => setFilter({ ...filter, GSM: e.target.value })} />
+                <Input placeholder="GSM" onKeyDown={handleKeyDown} onChange={e => setFilter({ ...filter, GSM: e.target.value })} />
             </Col>
             <Button type="primary" disabled={loading} onClick={() => fetchData(filter)}>
 				Search
