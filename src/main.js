@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import App from './pages/Home.js';
+
+import AppLayout from './layout/AppLayout.js';
+import Home from './pages/Home.js';
 import AquaGSM from './pages/AquaGSM.js';
 import TcProPersonal from './pages/TcProPersonal.js';
 import TcProFamily from './pages/TcProFamily.js';
@@ -13,10 +15,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <BrowserRouter>
             <BackendProvider>
                 <Routes>
-                    <Route path='aqua-gsm' element={<AquaGSM />} />
-                    <Route path='tcpro-personal' element={<TcProPersonal />} />
-                    <Route path='tcpro-family' element={<TcProFamily />} />
-                    <Route path='*' element={<App />} />
+                    <Route path="/" element={<AppLayout />}>
+                        <Route index element={<Home />} />
+                        <Route path="aqua-gsm" element={<AquaGSM />} />
+                        <Route path="tcpro-personal" element={<TcProPersonal />} />
+                        <Route path="tcpro-family" element={<TcProFamily />} />
+                    </Route>
                 </Routes>
             </BackendProvider>
         </BrowserRouter>
