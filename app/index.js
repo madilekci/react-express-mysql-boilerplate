@@ -4,6 +4,12 @@ import express, { json, urlencoded } from 'express';
 import cors from 'cors';
 import db from './models/index.js';
 
+// __dirname is not defined in ES module scope
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import routes from './routes/index.js';
 
 const app = express();
@@ -20,6 +26,15 @@ app.use(urlencoded({ extended: true }));
 app.use('/', routes);
 
 db.sequelize.sync();
+
+// Serve the static files from the Vite build directory
+const buildPath = path.resolve(__dirname, 'dist');
+app.use(express.static(buildPath));
+
+// Fallback to serve `index.html` for React routing
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(buildPath, 'index.html'));
+});
 
 // set port, listen for requests
 app.listen(PORT, () => {
