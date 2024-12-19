@@ -7,8 +7,8 @@ import AquaGSMTable from '../components/AquaGSMTable.js';
 import Spinner from '../components/Spinner.js';
 
 function AquaGSM() {
-    const [loading, setLoading] = useState(false);
     const backend = useBackend();
+    const [loading, setLoading] = useState(false);
     const [aquaGSMs, setAquaGSMs] = useState([]);
     const [filter, setFilter] = useState({
         TC: undefined,
@@ -57,11 +57,11 @@ function AquaGSM() {
 				Search
             </Button>
             <Divider />
-            {loading ? (
-                <Spinner />
-            ) : (
-                <AquaGSMTable dataSource={aquaGSMs} />
-            )}
+            {
+                loading ?
+                    <Spinner /> :
+                    <AquaGSMTable dataSource={aquaGSMs} />
+            }
         </div>
     );
 }
