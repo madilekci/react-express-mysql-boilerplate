@@ -1,9 +1,10 @@
+/* eslint-disable no-process-env */
 import dotenv from 'dotenv';
 dotenv.config();
 import { app, BrowserWindow } from 'electron';
 import startExpressServer from './app/index.js';
 
-const PORT = 3000;
+const PORT = process.env.PORT || 8081;
 let mainWindow;
 
 // Function to create the main window
