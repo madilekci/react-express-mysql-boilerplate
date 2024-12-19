@@ -1,3 +1,6 @@
+/* eslint-disable no-process-env */
+import dotenv from 'dotenv';
+dotenv.config();
 import { app, BrowserWindow } from 'electron';
 const createWindow = () => {
     const win = new BrowserWindow({
