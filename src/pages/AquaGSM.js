@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Button, Input, Col, Divider, Spin } from 'antd';
+import { Button, Input, Col, Divider } from 'antd';
 
 import Utils from '../helpers/utils.js';
 import { useBackend } from '../context/backend-context.js';
 import AquaGSMTable from '../components/AquaGSMTable.js';
+import Spinner from '../components/Spinner.js';
 
 function AquaGSM() {
     const [loading, setLoading] = useState(false);
@@ -57,9 +58,7 @@ function AquaGSM() {
             </Button>
             <Divider />
             {loading ? (
-                <Spin tip="Yükleniyor... Lütfen Bekleyiniz!">
-                    <div style={{ minHeight: '300px' }}></div>{' '}
-                </Spin>
+                <Spinner />
             ) : (
                 <AquaGSMTable dataSource={aquaGSMs} />
             )}
