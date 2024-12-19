@@ -45,7 +45,7 @@ const startExpressServer = () => {
     return app;
 };
 
-// Start the Express server
-startExpressServer();
+// Do not start the Express server, it will cause a conflict with Electron
+// startExpressServer();
 
 export default startExpressServer;
