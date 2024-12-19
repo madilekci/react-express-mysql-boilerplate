@@ -18,6 +18,8 @@ function createWindow() {
         },
     });
 
+    mainWindow.menuBarVisible = false;
+
     // Load the app served by the Express server
     mainWindow.loadURL(`http://localhost:${PORT}`);
 
