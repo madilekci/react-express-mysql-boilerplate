@@ -1,5 +1,6 @@
 {
 	"name": "ozmpanel",
+	"description": "This is the description",
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
@@ -11,7 +12,6 @@
 	"type": "module",
 	"author": "",
 	"license": "ISC",
-	"description": "",
 	"dependencies": {
 		"cors": "^2.8.5",
 		"dotenv": "^16.3.1",

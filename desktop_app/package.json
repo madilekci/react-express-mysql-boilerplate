@@ -1,5 +1,6 @@
 {
-  "name": "desktop_app",
+  "name": "ozmpanel-desktop-app",
+  "description": "This is the description",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -10,7 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "electron": "^33.2.1"
   },
