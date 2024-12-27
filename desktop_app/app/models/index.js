@@ -5,7 +5,7 @@ import Sequelize from 'sequelize';
 import AquaGSM from './aquaGSM.model.js';
 import TcPro from './tcPro.model.js';
 
-const { DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME, DB_DIALECT } = process.env;
+const { DB_USERNAME = root, DB_PASSWORD = '', DB_URL = 'localhost', DB_NAME = 'ozmpanel', DB_DIALECT = 'mysql'} = process.env;
 const POOL = {
     max: process.env.DB_POOL_MAX || 5,
     min: process.env.DB_POOL_MIN || 0,
