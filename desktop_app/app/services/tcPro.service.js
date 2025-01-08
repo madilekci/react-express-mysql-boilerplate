@@ -43,6 +43,8 @@ export default class TcProService {
             const relationships = [];
 
             const addRelationToArray = async(people, relation) => {
+                console.log('AddRelationToArray', { relation });
+                
                 if (!people || people.length === 0) {
                     return;
                 }
@@ -74,13 +76,18 @@ export default class TcProService {
             };
             const findSiblings = async person => {
                 const { BABATC, ANNETC, TC } = person;
+                const filter = [];
+
+                if (BABATC && BABATC !== '') {
+                    filter.push({ BABATC: BABATC },)
+                }
+                if (ANNETC && ANNETC !== '') {
+                    filter.push({ ANNETC: ANNETC },)
+                }
 
                 const siblings = await TcPro.findAll({
                     where: {
-                        [Op.or]: [
-                            { BABATC },
-                            { ANNETC }
-                        ],
+                        [Op.or]: filter,
                         // Exclude the current person
                         TC: { [Op.ne]: TC }
                     }
@@ -92,24 +99,28 @@ export default class TcProService {
             const findParents = async person => {
                 const { BABATC, ANNETC } = person;
 
-                const father = await TcPro.findOne({ where: { TC: BABATC } });
-                const mother = await TcPro.findOne({ where: { TC: ANNETC } });
+                const father = (BABATC && BABATC !== '') ? await TcPro.findOne({ where: { TC: BABATC } }) : null;
+                const mother = (ANNETC && ANNETC !== '') ? await TcPro.findOne({ where: { TC: ANNETC } }) : null;
                 const parents = [father, mother].filter(Boolean);
 
-                addRelationToArray([father], this.relationKeys.father);
-                addRelationToArray([mother], this.relationKeys.mother);
+                if (father) {
+                    addRelationToArray([father], this.relationKeys.father);
+                }
+                if (mother) {
+                    addRelationToArray([mother], this.relationKeys.mother);
+                }
 
                 return parents;
             };
             const findGrandParents = async parents => {
                 const grandParents = [];
                 for await (const parent of parents) {
-                    if (parent.BABATC) {
+                    if (parent.BABATC && parent.BABATC !== '') {
                         const grandFather = await TcPro.findOne({ where: { TC: parent.BABATC } });
                         addRelationToArray([grandFather], this.relationKeys.grandFather);
                         grandParents.push(grandFather);
                     }
-                    if (parent.ANNETC) {
+                    if (parent.ANNETC && parent.ANNETC !== '') {
                         const grandMother = await TcPro.findOne({ where: { TC: parent.ANNETC } });
                         addRelationToArray([grandMother], this.relationKeys.grandMother);
                         grandParents.push(grandMother);
@@ -121,12 +132,17 @@ export default class TcProService {
             const findUnclesAunts = async parents => {
                 const unclesAunts = [];
                 for await (const parent of parents) {
+                    const filter = [];
+                    if (parent.BABATC && parent.BABATC !== '') {
+                        filter.push({ BABATC: parent.BABATC },)
+                    }
+                    if (parent.ANNETC && parent.ANNETC !== '') {
+                        filter.push({ ANNETC: parent.ANNETC },)
+                    }
+
                     const _unclesAunts = await TcPro.findAll({
                         where: {
-                            [Op.or]: [
-                                { BABATC: parent.BABATC },
-                                { ANNETC: parent.ANNETC }
-                            ],
+                            [Op.or]: filter,
                             // Exclude the parent themselves
                             TC: { [Op.ne]: parent.TC }
                         }
@@ -136,7 +152,9 @@ export default class TcProService {
                     }
                 }
 
-                addRelationToArray(unclesAunts, this.relationKeys.uncleAunt);
+                if (unclesAunts.length > 0) {
+                    addRelationToArray(unclesAunts, this.relationKeys.uncleAunt);
+                }
 
                 return unclesAunts;
             };
@@ -156,7 +174,9 @@ export default class TcProService {
                     }
                 }
 
-                addRelationToArray(cousins, this.relationKeys.cousin);
+                if (cousins.length > 0) {
+                    addRelationToArray(cousins, this.relationKeys.cousin);
+                }
 
                 return cousins;
             };
@@ -171,11 +191,17 @@ export default class TcProService {
             if (advancedSearch) {
                 // Find uncles/aunts, cousins
                 const unclesAunts = await findUnclesAunts(parents);
-                await findCousins(unclesAunts);           
+                if (unclesAunts.length > 0) {
+                    await findCousins(unclesAunts);           
+                }
 
                 // Find grandparents, grandchilds
-                await findGrandParents(parents);
-                await findGrandChildren(children);
+                if (parents.length > 0) {
+                    await findGrandParents(parents);
+                }
+                if (children.length > 0) {
+                    await findGrandChildren(children);
+                }
             }
 
             return relationships;
